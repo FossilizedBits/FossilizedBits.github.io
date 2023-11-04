@@ -1,8 +1,3 @@
-<!-- ---
-layout: post
-title: "Welcome to minima-reboot"
---- -->
-
 ---
 layout: post
 title: "Rethinking my Homelab"
