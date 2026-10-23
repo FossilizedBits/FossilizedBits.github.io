@@ -2,7 +2,7 @@
 export const site = {
   name: "Fossilized Bits",
   legalName: "Fossilized Bits LLC",
-  url: "https://fossilizedbits.com",
+  url: "https://www.fossilizedbits.com",
   founded: 2014,
   description:
     "Focused apps for homelab and mobile. One problem, one app at a time.",
