@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { formatDate } from "../../lib/status";
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="Blog" description="Notes on building small apps for the oilfield.">
+  <section class="wrap page-head">
+    <h1>Blog</h1>
+  </section>
+  <section class="wrap section-tight">
+    <ol class="post-list">
+      {posts.map((post) => (
+        <li class="post-teaser">
+          <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+          <p class="meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></p>
+          <p>{post.data.summary}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>

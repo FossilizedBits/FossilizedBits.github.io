@@ -1,0 +1,502 @@
+/* Fossilized Bits: tokens
+   Log paper and shale ink, a gamma-ray green for the curve, rig-safety yellow for focus only. */
+:root {
+  --paper: #eceee8;
+  --paper-2: #e0e4dd;
+  --ink: #1e2a2f;
+  --ink-2: #56635e;
+  --grid: #c3ccc4;
+  --curve: #1f6e5a;
+  --hazard: #e2ae12;
+  --planned: #8a6a2f;
+
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+
+  --wrap: clamp(72rem, 80vw, 110rem);
+  /*--wrap: 72rem;*/
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.375rem;
+  --step-2: clamp(1.75rem, 3.5vw, 2.25rem);
+  --step-3: clamp(2.25rem, 5vw, 3.25rem);
+  --step-4: clamp(3.25rem, 9vw, 6.75rem);
+  color-scheme: light;
+}
+
+/* Dark theme: follows the system unless the visitor picks one with the toggle (data-theme on <html>). */
+:root[data-theme="dark"] {
+    --paper: #151c1f;
+    --paper-2: #1d272a;
+    --ink: #e2e7e1;
+    --ink-2: #9aa8a2;
+    --grid: #2f3c3d;
+    --curve: #5cc0a0;
+    --hazard: #f0c030;
+    --planned: #d2a961;
+    color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151c1f;
+    --paper-2: #1d272a;
+    --ink: #e2e7e1;
+    --ink-2: #9aa8a2;
+    --grid: #2f3c3d;
+    --curve: #5cc0a0;
+    --hazard: #f0c030;
+    --planned: #d2a961;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+img, svg { max-width: 100%; height: auto; }
+img { display: block; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--hazard); outline-offset: 3px; }
+p { margin: 0 0 1em; }
+
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: 0.95;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: var(--step-4); letter-spacing: -0.005em; }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-2); font-weight: 700; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 1rem; top: 1rem; z-index: 10; background: var(--ink); color: var(--paper); padding: 0.5rem 1rem; }
+
+.lede { font-size: var(--step-1); line-height: 1.4; max-width: 34ch; color: var(--ink); margin-top: 1.25rem; }
+.meta { color: var(--ink-2); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 1.3rem;
+  background: var(--ink); color: var(--paper);
+  font-weight: 600; text-decoration: none;
+  border-radius: 0.3rem;
+}
+.btn:hover { background: var(--curve); color: var(--paper); }
+
+/* Header and footer */
+.site-header { border-bottom: 2px solid var(--ink); }
+.site-header-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.75rem 2rem; padding-block: 1rem;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--display); font-weight: 800; font-size: 1.75rem; line-height: 1;
+  text-decoration: none;
+}
+.nav { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; }
+.nav a { text-decoration: none; font-weight: 500; padding-block: 0.25rem; }
+.nav a:hover, .nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.site-footer { border-top: 2px solid var(--ink); margin-top: clamp(4rem, 10vw, 7rem); }
+.site-footer-inner {
+  display: grid; grid-template-columns: 1fr auto; gap: 1.5rem 2rem;
+  padding-block: 2rem 2.5rem; font-size: var(--step--1);
+}
+.footer-brand { display: flex; gap: 0.85rem; align-items: flex-start; }
+.footer-brand p { margin: 0; color: var(--ink-2); }
+.footer-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-content: start; justify-content: flex-end; }
+.footer-copy { grid-column: 1 / -1; margin: 0; color: var(--ink-2); }
+@media (max-width: 640px) {
+  .site-footer-inner { grid-template-columns: 1fr; }
+  .footer-links { justify-content: flex-start; }
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding-block: clamp(3rem, 9vw, 6.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  container-type: inline-size; /* lets the type below size itself to the hero's width */
+}
+/* Headline: always one line. The text is about 11.4em wide, so 100cqi / 11.8
+   is the largest size that fits the column, capped at 7.5rem on wide screens. */
+.hero h1 {
+  font-size: min(7.5rem, 100cqi / 11.8);
+  white-space: nowrap;
+  margin-inline: auto;
+}
+/* Lede: two balanced lines. The text is about 69em long, so a 37em measure
+   splits it in two. The size shrinks with the column to keep two lines, down
+   to body size; narrower than that (phones) it wraps to more lines instead. */
+.hero .lede {
+  font-size: max(var(--step-0), min(clamp(1.375rem, 1.6vw, 2rem), 100cqi / 37));
+  max-width: min(37em, 100%);
+  text-wrap: balance;
+  margin: 1.5rem auto 0;
+}
+.hero .btn { margin-top: 1.75rem; }
+
+/* Home page progress log: one formation per app */
+.plog { --depth-w: 3.25rem; --lith-w: 3.5rem; --track-w: clamp(7rem, 16vw, 11rem); }
+.plog-head, .plog-row {
+  display: grid;
+  grid-template-columns: var(--depth-w) var(--lith-w) var(--track-w) minmax(0, 1fr) auto;
+}
+.plog-head {
+  align-items: end; padding-bottom: 0.5rem;
+  font-size: 0.75rem; color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+.plog-depth-head { text-align: right; padding-right: 0.5rem; }
+.plog-lith-head { color: var(--ink); font-weight: 600; padding-left: 0.2rem; }
+.plog-track-head { padding-inline: 0.4rem; }
+.plog-track-title { display: block; color: var(--ink); font-weight: 600; }
+.plog-scale { display: flex; justify-content: space-between; }
+.plog-rows { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.plog-row:last-child .plog-track { border-bottom: 1px solid var(--ink); }
+.plog-row { position: relative; min-height: 8rem; }
+/* Formation boundaries cross the rock and text columns but not the progress track,
+   so the curve runs unbroken from one app to the next. */
+.plog-row > :not(.plog-depth, .plog-track) { border-bottom: 1px solid var(--ink); }
+.plog-depth {
+  text-align: right; padding: 0.3rem 0.5rem 0 0;
+  font-size: 0.75rem; color: var(--ink-2); font-variant-numeric: tabular-nums;
+  background: linear-gradient(var(--ink-2), var(--ink-2)) right 25% / 5px 1px no-repeat,
+              linear-gradient(var(--ink-2), var(--ink-2)) right 50% / 5px 1px no-repeat,
+              linear-gradient(var(--ink-2), var(--ink-2)) right 75% / 5px 1px no-repeat;
+}
+.plog-lith { border-left: 1.5px solid var(--ink); border-right: 1px solid var(--ink); }
+.plog-track {
+  position: relative; border-right: 1.5px solid var(--ink);
+  /* grid lines at 25, 50 and 75 percent mark the status bands */
+  background:
+    linear-gradient(var(--grid), var(--grid)) 25% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--grid), var(--grid)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--grid), var(--grid)) 75% 0 / 1px 100% no-repeat;
+}
+.plog-track svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.plog-track path {
+  fill: none; stroke: var(--curve); stroke-width: 1.8;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+/* Reveal each formation's stretch of curve in turn, top to bottom. */
+@media (prefers-reduced-motion: no-preference) {
+  .plog-track svg { animation: log-draw 0.4s linear calc(0.2s + var(--i) * 0.4s) both; }
+  @keyframes log-draw {
+    from { clip-path: inset(-2px -2px calc(100% + 2px) -2px); }
+    to { clip-path: inset(-2px -2px -2px -2px); }
+  }
+}
+.plog-text { padding: 1.25rem 1rem 1.25rem 1.5rem; align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+.plog-name { font-size: var(--step-2); }
+.plog-name a { text-decoration: none; }
+.plog-name a::after { content: ""; position: absolute; inset: 0; }
+.plog-row:hover .plog-name a { text-decoration: underline; text-decoration-thickness: 2px; }
+.plog-row:hover .plog-text, .plog-row:hover .plog-meta { background: var(--paper-2); }
+.plog-row:focus-within { outline: 3px solid var(--hazard); outline-offset: -3px; }
+.plog-name a:focus-visible { outline: none; }
+.plog-tagline { margin: 0.4rem 0 0; color: var(--ink-2); max-width: 46ch; }
+.plog-meta {
+  margin: 0; padding-right: 0.5rem; align-self: stretch;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 0.2rem;
+  font-size: var(--step--1);
+}
+.plog-platforms { color: var(--ink-2); }
+@media (max-width: 720px) {
+  .plog { --depth-w: 0rem; --lith-w: 1.5rem; --track-w: 4.5rem; }
+  .plog-head, .plog-row { grid-template-columns: var(--lith-w) var(--track-w) minmax(0, 1fr); }
+  .plog-depth, .plog-depth-head { display: none; }
+  .plog-lith-head { visibility: hidden; }
+  .plog-scale { font-size: 0.6875rem; }
+  .plog-row { grid-template-rows: 1fr auto; }
+  .plog-lith, .plog-track { grid-row: 1 / span 2; }
+  .plog-text { padding: 1rem 0.5rem 0.25rem 1rem; border-bottom: 0 !important; }
+  .plog-meta { grid-column: 3; flex-direction: row; justify-content: flex-start; gap: 0.75rem; padding: 0 0.5rem 1rem 1rem; }
+}
+
+/* Lithology pattern, masked so it takes the ink color in both themes */
+.litho { position: relative; display: block; overflow: hidden; background: var(--paper-2); }
+/* Beds sit in an absolute layer so extra beds never make the column taller; they're cut off instead. */
+.litho-beds { position: absolute; inset: 0; display: flex; flex-direction: column; }
+/* One bed per rock. A single rock fills the column; interbedded rocks alternate every --bed. */
+.litho-bed { position: relative; flex: 1 0 auto; }
+.litho-interbedded .litho-bed { flex: 0 0 var(--bed, 0.85rem); }
+.litho-bed::before {
+  content: ""; position: absolute; inset: 0;
+  background: var(--ink);
+  -webkit-mask-image: var(--tile); mask-image: var(--tile);
+  opacity: 0.8;
+}
+
+/* Sections */
+.section { padding-top: clamp(2.5rem, 6vw, 4rem); }
+.section-tight { padding-top: 1rem; }
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding-bottom: 0.75rem;
+}
+.page-head { padding-block: clamp(2.5rem, 6vw, 4.5rem) 1.5rem; }
+.page-head .btn { margin-top: 0.5rem; }
+.crumbs { font-size: var(--step--1); color: var(--ink-2); margin-bottom: 1.25rem; }
+
+/* App strata list */
+.strata { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.stratum {
+  position: relative;
+  display: grid; grid-template-columns: 3rem 4.5rem minmax(0, 1fr) auto;
+  gap: 0 1.5rem; align-items: center;
+  min-height: 8rem; padding-right: 0.5rem;
+  border-bottom: 1px solid var(--ink);
+}
+.stratum-litho { align-self: stretch; border-right: 1px solid var(--ink); }
+.stratum-text { padding-block: 1.25rem; }
+.stratum-name { font-size: var(--step-2); }
+.stratum-name a { text-decoration: none; }
+.stratum-name a::after { content: ""; position: absolute; inset: 0; }
+.stratum:hover .stratum-name a { text-decoration: underline; text-decoration-thickness: 2px; }
+.stratum:focus-within { outline: 3px solid var(--hazard); outline-offset: -3px; }
+.stratum-name a:focus-visible { outline: none; }
+.stratum-tagline { margin: 0.4rem 0 0; color: var(--ink-2); max-width: 46ch; }
+.stratum-meta { margin: 0; text-align: right; font-size: var(--step--1); display: grid; gap: 0.2rem; }
+.stratum-platforms { color: var(--ink-2); }
+@media (max-width: 640px) {
+  .stratum { grid-template-columns: 1.25rem 3.5rem minmax(0, 1fr); gap: 0 1rem; }
+  .stratum .app-icon { --size: 3.5rem !important; }
+  .stratum-text { padding-block: 1rem 0.25rem; }
+  .stratum-meta { grid-column: 3; text-align: left; padding-bottom: 1rem; display: flex; gap: 0.75rem; }
+}
+
+.status { font-weight: 600; }
+.status::before {
+  content: ""; display: inline-block; width: 0.55em; height: 0.55em; margin-right: 0.4em;
+  border: 1.5px solid currentColor; border-radius: 50%; vertical-align: 0.05em;
+}
+.status-planned { color: var(--planned); }
+.status-in-development { color: var(--ink); }
+.status-in-development::before { background: conic-gradient(currentColor 0 50%, transparent 50% 100%); }
+.status-testing { color: var(--curve); }
+.status-testing::before { background: conic-gradient(currentColor 0 75%, transparent 75% 100%); }
+.status-released { color: var(--curve); }
+.status-released::before { background: currentColor; }
+
+/* App icon (falls back to initials over the app's rock pattern) */
+.app-icon {
+  position: relative; flex: none;
+  width: var(--size); height: var(--size);
+  border-radius: 22.5%; overflow: hidden;
+  border: 1.5px solid var(--ink); background: var(--paper);
+  display: grid; place-items: center;
+}
+.app-icon img { width: 100%; height: 100%; object-fit: cover; }
+.app-icon-pattern { position: absolute; inset: 0; background: transparent; opacity: 0.35; }
+.app-icon-initials {
+  position: relative; font-family: var(--display); font-weight: 800;
+  font-size: calc(var(--size) * 0.44); line-height: 1;
+  background: var(--paper); padding: 0.05em 0.12em; border-radius: 0.1em;
+}
+
+/* App page */
+.app-hero { padding-block: clamp(2rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3rem); }
+.app-hero-grid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(1.25rem, 4vw, 2.5rem); align-items: start; }
+.app-hero .lede { max-width: 40ch; }
+.app-actions { margin-top: 1.5rem; }
+.app-status-line { margin: 0; font-size: var(--step-1); }
+@media (max-width: 560px) { .app-hero-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.app-band { height: 1.5rem; --bed: 0.5rem; border-block: 1.5px solid var(--ink); }
+
+.shots-wrap { border-bottom: 1px solid var(--ink); }
+.shots {
+  display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 2rem var(--gutter); max-width: var(--wrap); margin-inline: auto;
+}
+.shot { margin: 0; flex: none; scroll-snap-align: start; }
+.shot img { border-radius: 1.5rem; border: 1.5px solid var(--ink); }
+.shot-iphone { width: min(15rem, 62vw); }
+.shot-ipad { width: min(28rem, 85vw); }
+.shot-ipad img { border-radius: 1rem; }
+
+.app-body {
+  display: grid; grid-template-columns: minmax(0, 1fr) 17rem; gap: clamp(2rem, 5vw, 4rem);
+  padding-top: clamp(2.5rem, 6vw, 3.5rem);
+}
+@media (max-width: 860px) { .app-body { grid-template-columns: minmax(0, 1fr); } }
+.summary { font-size: var(--step-1); line-height: 1.4; }
+
+.spec { align-self: start; border-top: 2px solid var(--ink); font-size: var(--step--1); }
+.spec dl { margin: 0; display: grid; grid-template-columns: auto 1fr; }
+.spec dt, .spec dd { margin: 0; padding: 0.65rem 0; border-bottom: 1px solid var(--grid); }
+.spec dt { color: var(--ink-2); padding-right: 1rem; }
+.spec dd { font-weight: 600; text-align: right; }
+.spec-links { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; gap: 1.25rem; }
+
+.highlights {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  border-top: 2px solid var(--ink);
+}
+.highlights li { padding: 1.25rem 1.5rem 1.5rem 0; border-bottom: 1px solid var(--grid); }
+.highlights h3 { font-size: var(--step-1); font-family: var(--body); font-weight: 650; line-height: 1.25; margin-bottom: 0.4rem; }
+.highlights p { margin: 0; color: var(--ink-2); max-width: 36ch; }
+
+/* Prose (app descriptions, blog posts, policies) */
+.prose { max-width: 66ch; }
+/* A section that is both .wrap and .prose keeps the page's left edge, so the
+   text lines up under the heading; only the line length is capped. */
+.wrap.prose { max-width: var(--wrap); }
+.wrap.prose > * { max-width: 66ch; }
+.prose h2 { font-size: var(--step-2); margin: 2rem 0 0.75rem; }
+.prose h3 { font-size: var(--step-1); margin: 1.5rem 0 0.5rem; }
+.prose ul, .prose ol { padding-left: 1.25rem; margin: 0 0 1em; }
+.prose pre {
+  margin: 1.25rem 0 1.5rem; padding: 1rem 1.25rem;
+  background: var(--paper-2); border-left: 3px solid var(--curve);
+  overflow-x: auto; font-size: 0.9375rem; line-height: 1.7;
+}
+.prose pre code { font-family: var(--body); font-variant-numeric: tabular-nums; white-space: pre-wrap; }
+.prose :not(pre) > code { font-family: var(--body); background: var(--paper-2); padding: 0.1em 0.3em; border-radius: 0.2em; }
+
+/* Blog */
+.post-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.post-teaser { padding-block: 1.5rem; border-bottom: 1px solid var(--grid); }
+.section .post-teaser { border-top: 2px solid var(--ink); }
+.post-teaser h2, .post-teaser h3 { font-size: var(--step-2); }
+.post-teaser h2 a, .post-teaser h3 a { text-decoration: none; }
+.post-teaser h2 a:hover, .post-teaser h3 a:hover { text-decoration: underline; }
+.post-teaser .meta { margin: 0.4rem 0 0.6rem; }
+.post-teaser p:last-child { margin: 0; max-width: 60ch; }
+
+/* FAQ */
+.faq { border-top: 2px solid var(--ink); max-width: 66ch; }
+.faq details { border-bottom: 1px solid var(--grid); }
+.faq summary { cursor: pointer; padding: 1rem 0; font-weight: 600; }
+.faq details p { margin: 0 0 1rem; color: var(--ink-2); }
+
+/* Company logo: the trilobite in /public/logo.svg, tinted with the ink color */
+.logo {
+  display: inline-block; flex: none;
+  width: var(--logo-size); height: var(--logo-size);
+  background: var(--ink);
+  -webkit-mask: url("/logo.svg") center / contain no-repeat;
+  mask: url("/logo.svg") center / contain no-repeat;
+}
+.brand:hover .logo { background: var(--curve); }
+
+/* Real app icons bring their own background, so drop the placeholder frame */
+.app-icon.has-image { border: 0; background: transparent; box-shadow: 0 0 0 1px var(--grid); }
+.app-icon .icon-dark { display: none; }
+:root[data-theme="dark"] .app-icon .icon-dark { display: block; }
+:root[data-theme="dark"] .app-icon .icon-light.has-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .app-icon .icon-dark { display: block; }
+  :root:not([data-theme="light"]) .app-icon .icon-light.has-dark { display: none; }
+}
+
+/* Light/dark toggle in the header */
+.site-tools { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.theme-toggle {
+  display: inline-grid; place-items: center;
+  width: 2.5rem; height: 2.5rem; margin: -0.25rem -0.5rem -0.25rem 0;
+  padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ink); cursor: pointer;
+}
+.theme-toggle:hover { background: var(--paper-2); }
+.theme-toggle svg { width: 1.25rem; height: 1.25rem; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+.shot-mac { width: min(40rem, 90vw); }
+.shot-mac img { border-radius: 0.6rem; }
+
+/* Platform pattern legend */
+.platform-key {
+  list-style: none; margin: 1rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.5rem;
+  font-size: var(--step--1); color: var(--ink-2);
+}
+.platform-key li { display: flex; align-items: center; gap: 0.5rem; }
+.platform-key-swatch { width: 1.75rem; height: 1.25rem; border: 1px solid var(--ink); }
+.platform-key-note { color: var(--ink-2); font-style: italic; }
+/* /apps/ catalog */
+.catalog-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 1rem 2rem; padding-bottom: 1.25rem;
+}
+.catalog-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.45rem 0.9rem; border: 1.5px solid var(--ink); border-radius: 999px;
+  background: transparent; color: var(--ink);
+  font: inherit; font-size: var(--step--1); font-weight: 600; cursor: pointer;
+}
+.chip:hover { background: var(--paper-2); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.chip-swatch { width: 1.1rem; height: 0.85rem; border: 1px solid currentColor; border-radius: 2px; }
+.chip[aria-pressed="true"] .chip-swatch { background: var(--paper); }
+.catalog-count { margin: 0; font-size: var(--step--1); color: var(--ink-2); }
+
+.cards {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
+  gap: 1.25rem;
+}
+.card {
+  position: relative; display: flex; flex-direction: column;
+  border: 1.5px solid var(--ink); border-radius: 0.5rem; overflow: hidden;
+  background: var(--paper);
+}
+.card[hidden] { display: none; }
+.card:hover { background: var(--paper-2); }
+.card:focus-within { outline: 3px solid var(--hazard); outline-offset: 2px; }
+.card-litho { height: 1rem; --bed: 0.34rem; border-bottom: 1.5px solid var(--ink); }
+.card-body { padding: 1.25rem 1.25rem 0.75rem; flex: 1; }
+.card-head { display: flex; align-items: center; gap: 0.9rem; }
+.card-name { font-size: var(--step-2); }
+.card-name a { text-decoration: none; }
+.card-name a::after { content: ""; position: absolute; inset: 0; }
+.card-name a:focus-visible { outline: none; }
+.card:hover .card-name a { text-decoration: underline; text-decoration-thickness: 2px; }
+.card-category { margin: 0.25rem 0 0; font-size: var(--step--1); color: var(--ink-2); }
+.card-tagline { margin: 1rem 0 0.5rem; }
+.card-platforms { margin: 0; font-size: var(--step--1); color: var(--ink-2); }
+.card-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 3.5rem; padding: 0.6rem 1.25rem; border-top: 1px solid var(--grid);
+}
+.card-status { margin: 0; display: flex; gap: 0.75rem; align-items: baseline; font-size: var(--step--1); }
+.card-version { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.card-action { position: relative; z-index: 1; }
+.btn-small { padding: 0.45rem 0.9rem; font-size: var(--step--1); }
+
+/* Social icons (Font Awesome SVGs in /public/images/social), tinted with the ink color */
+.social { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 1.25rem 0 0 -0.4rem; }
+.social a { display: block; color: var(--ink-2); border-radius: 0.3rem; }
+.social a:hover { color: var(--curve); }
+.social-icon {
+  display: block;
+  width: 2.75rem; height: 2.75rem;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.page-head .social + .btn { margin-top: 1.75rem; }

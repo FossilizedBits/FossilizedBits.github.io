@@ -1,0 +1,76 @@
+---
+// /apps/ catalog: a filterable grid of app cards. Each card's top edge carries its platform pattern.
+import AppIcon from "./AppIcon.astro";
+import Litho from "./Litho.astro";
+import { statusLabel, platformList, storeUrl } from "../lib/status";
+import { rocksFor, platforms, platformRock } from "../lib/lithology";
+interface Props { apps: any[] }
+const { apps } = Astro.props;
+const used = platforms.filter((p) => apps.some((a) => a.data.platforms.includes(p)));
+const countText = (n: number) => `${n} ${n === 1 ? "app" : "apps"} shown`;
+---
+<div class="catalog" data-catalog>
+  <div class="catalog-bar">
+    <div class="catalog-filters" role="group" aria-label="Filter by platform">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+      {used.map((p) => (
+        <button type="button" class="chip" data-filter={p} aria-pressed="false">
+          <Litho kinds={[platformRock[p]]} class="chip-swatch" />{p}
+        </button>
+      ))}
+    </div>
+    <p class="catalog-count" aria-live="polite" data-count>{countText(apps.length)}</p>
+  </div>
+
+  <ul class="cards">
+    {apps.map((app) => {
+      const d = app.data;
+      const store = storeUrl(d.appStoreId);
+      return (
+        <li class="card" data-platforms={d.platforms.join("|")}>
+          <Litho kinds={rocksFor(d)} class="card-litho" />
+          <div class="card-body">
+            <div class="card-head">
+              <AppIcon name={d.name} icon={d.icon} iconDark={d.iconDark} size="3.5rem" />
+              <div>
+                <h2 class="card-name"><a href={`/apps/${app.id}/`}>{d.name}</a></h2>
+                {d.category && <p class="card-category">{d.category}</p>}
+              </div>
+            </div>
+            <p class="card-tagline">{d.tagline}</p>
+            <p class="card-platforms">{platformList(d.platforms)}</p>
+          </div>
+          <div class="card-foot">
+            <p class="card-status">
+              <span class={`status status-${d.status}`}>{statusLabel[d.status as keyof typeof statusLabel]}</span>
+              {d.version && <span class="card-version">v{d.version}</span>}
+            </p>
+            {store
+              ? <a class="btn btn-small card-action" href={store}>App Store</a>
+              : d.testFlightUrl && <a class="btn btn-small card-action" href={d.testFlightUrl}>TestFlight</a>}
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</div>
+<script is:inline>
+  document.querySelectorAll("[data-catalog]").forEach((cat) => {
+    const chips = cat.querySelectorAll("[data-filter]");
+    const cards = cat.querySelectorAll(".card");
+    const count = cat.querySelector("[data-count]");
+    chips.forEach((chip) =>
+      chip.addEventListener("click", () => {
+        const f = chip.dataset.filter;
+        chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+        let n = 0;
+        cards.forEach((card) => {
+          const show = f === "all" || card.dataset.platforms.split("|").includes(f);
+          card.hidden = !show;
+          if (show) n++;
+        });
+        count.textContent = `${n} ${n === 1 ? "app" : "apps"} shown`;
+      }),
+    );
+  });
+</script>

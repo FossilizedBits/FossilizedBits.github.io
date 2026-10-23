@@ -1,0 +1,13 @@
+---
+// A rock column. One rock fills the space; several alternate as thin beds (interbedded),
+// repeating as far as the space allows. Bed thickness comes from --bed in CSS.
+import { tileUrl } from "../lib/lithology";
+interface Props { kinds: string[]; class?: string }
+const { kinds, class: className } = Astro.props;
+const beds = kinds.length > 1 ? Array.from({ length: 40 }, (_, i) => kinds[i % kinds.length]) : kinds;
+---
+<span class:list={["litho", { "litho-interbedded": kinds.length > 1 }, className]} aria-hidden="true">
+  <span class="litho-beds">
+    {beds.map((k) => <span class="litho-bed" style={`--tile:${tileUrl(k)}`}></span>)}
+  </span>
+</span>

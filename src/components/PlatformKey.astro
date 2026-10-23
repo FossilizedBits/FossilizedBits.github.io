@@ -1,0 +1,14 @@
+---
+// Legend for the platform patterns. Shows only platforms that at least one app uses.
+import Litho from "./Litho.astro";
+import { platforms, platformRock } from "../lib/lithology";
+interface Props { apps: any[] }
+const { apps } = Astro.props;
+const used = platforms.filter((p) => apps.some((a) => a.data.platforms.includes(p)));
+---
+<ul class="platform-key" aria-label="Platform patterns">
+  {used.map((p) => (
+    <li><Litho kinds={[platformRock[p]]} class="platform-key-swatch" /><span>{p}</span></li>
+  ))}
+  {used.length > 1 && <li class="platform-key-note">Alternating layers mean several platforms</li>}
+</ul>

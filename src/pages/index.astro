@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ProgressLog from "../components/ProgressLog.astro";
+import PlatformKey from "../components/PlatformKey.astro";
+import { formatDate } from "../lib/status";
+
+const apps = (await getCollection("apps")).sort((a, b) => a.data.order - b.data.order);
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latest = posts[0];
+---
+<Base>
+  <section class="wrap hero">
+    <h1>Simple Problems, Focused Apps</h1>
+    <p class="lede">
+      Focused apps for homelab and mobile. One problem, one app at a time.
+      Some are self-hosted and some target homelab services, but they're always simple.
+    </p>
+    {/* <a class="btn" href="/apps/">Browse the Apps</a> */}
+  </section>
+
+  <section class="wrap section" aria-labelledby="apps-heading">
+    <div class="section-head">
+      <h2 id="apps-heading">Apps</h2>
+      <a href="/apps/">All Apps</a>
+    </div>
+    <ProgressLog apps={apps} />
+    <PlatformKey apps={apps} />
+  </section>
+
+  {latest && (
+    <section class="wrap section" aria-labelledby="blog-heading">
+      <div class="section-head">
+        <h2 id="blog-heading">From the Blog</h2>
+        <a href="/blog/">All Posts</a>
+      </div>
+      <article class="post-teaser">
+        <h3><a href={`/blog/${latest.id}/`}>{latest.data.title}</a></h3>
+        <p class="meta"><time datetime={latest.data.date.toISOString()}>{formatDate(latest.data.date)}</time></p>
+        <p>{latest.data.summary}</p>
+      </article>
+    </section>
+  )}
+</Base>

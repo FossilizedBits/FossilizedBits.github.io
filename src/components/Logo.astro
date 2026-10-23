@@ -1,0 +1,6 @@
+---
+// The Fossilized Bits trilobite, drawn from /logo.svg as a mask so it takes the theme's ink color.
+interface Props { size?: string; class?: string }
+const { size = "2.5rem", class: className } = Astro.props;
+---
+<span class:list={["logo", className]} style={`--logo-size:${size}`} aria-hidden="true"></span>

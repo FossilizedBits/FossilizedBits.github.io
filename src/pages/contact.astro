@@ -1,0 +1,20 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../site.config";
+---
+<Base title="Contact" description={`Get in touch with ${site.name}.`}>
+  <section class="wrap page-head">
+    <h1>Contact</h1>
+    <p class="lede">Questions, bug reports and app ideas from the field are all welcome. We read everything.</p>
+    <ul class="social">
+      {site.social.map((s) => (
+        <li>
+          <a href={s.href} rel="me noopener" aria-label={s.label} title={s.label}>
+            <span class="social-icon" style={`--icon: url("/images/social/${s.icon}")`} aria-hidden="true"></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+	{/* <a class="btn" href={`mailto:${site.email}`}>Email {site.email}</a> */}
+  </section>
+</Base>

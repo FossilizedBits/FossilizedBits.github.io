@@ -1,0 +1,65 @@
+---
+// Home page app list drawn as a well log. Each app is a formation in its rock pattern, and the
+// progress curve wanders inside the band for its status (see statusRange). Seeded noise keeps the
+// curve identical between builds, and it runs continuously from one app to the next.
+import Litho from "./Litho.astro";
+import { statusLabel, statusRange, platformList } from "../lib/status";
+import { rocksFor } from "../lib/lithology";
+
+interface Props { apps: any[] }
+const { apps } = Astro.props;
+
+let seed = 20140101;
+const rand = () => {
+  seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
+const steps = 34; // samples per formation
+const mid = (s: keyof typeof statusRange) => (statusRange[s][0] + statusRange[s][1]) / 2;
+let v = apps.length ? mid(apps[0].data.status) : 50;
+
+const rows = apps.map((app, i) => {
+  const [lo, hi] = statusRange[app.data.status as keyof typeof statusRange];
+  const pts: string[] = [`${v.toFixed(1)},0`];
+  for (let k = 1; k <= steps; k++) {
+    const target = lo + 2 + rand() * (hi - lo - 4);
+    v = v * 0.55 + target * 0.45;
+    pts.push(`${v.toFixed(1)},${((k / steps) * 100).toFixed(1)}`);
+  }
+  return { app, path: "M" + pts.join(" L"), depth: (i * 500).toLocaleString("en-US") };
+});
+---
+<div class="plog">
+  <div class="plog-head" aria-hidden="true">
+    <span class="plog-depth-head">ft</span>
+    <span class="plog-lith-head">Platform</span>
+    <span class="plog-track-head">
+      <span class="plog-track-title">Progress</span>
+      <span class="plog-scale"><span>0</span><span>100%</span></span>
+    </span>
+  </div>
+  <ol class="plog-rows">
+    {rows.map(({ app, path, depth }, i) => (
+      <li class="plog-row" style={`--i:${i}`}>
+        <span class="plog-depth" aria-hidden="true">{depth}</span>
+        <Litho kinds={rocksFor(app.data)} class="plog-lith" />
+        <span class="plog-track" aria-hidden="true">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+            <path d={path} vector-effect="non-scaling-stroke" />
+          </svg>
+        </span>
+        <div class="plog-text">
+          <h3 class="plog-name"><a href={`/apps/${app.id}/`}>{app.data.name}</a></h3>
+          <p class="plog-tagline">{app.data.tagline}</p>
+        </div>
+        <p class="plog-meta">
+          <span class={`status status-${app.data.status}`}>{statusLabel[app.data.status as keyof typeof statusLabel]}</span>
+          <span class="plog-platforms">{platformList(app.data.platforms)}</span>
+        </p>
+      </li>
+    ))}
+  </ol>
+</div>

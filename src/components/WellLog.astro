@@ -1,0 +1,85 @@
+---
+// Hero graphic: a well log whose formations are the apps, top to bottom in release order.
+// The gamma-ray curve follows each rock type's typical reading, with seeded noise so it is stable between builds.
+import { lithology } from "../lib/lithology";
+import { statusLabel } from "../lib/status";
+
+interface App { id: string; data: { name: string; lithology: string; status: keyof typeof statusLabel } }
+interface Props { apps: App[] }
+const { apps } = Astro.props;
+
+const band = 104;
+const top = 34;
+const H = top + apps.length * band + 8;
+const W = 360;
+const depthW = 46;
+const lithX = depthW, lithW = 40;
+const grX = lithX + lithW, grW = 118;
+const labelX = grX + grW + 14;
+const gMax = 150;
+
+let seed = 20140101;
+const rand = () => {
+  seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
+let v = lithology[apps[0]?.data.lithology ?? "shale"].gamma;
+const pts: string[] = [];
+apps.forEach((app, i) => {
+  const base = lithology[app.data.lithology].gamma;
+  for (let y = 0; y <= band; y += 3) {
+    const target = base + (rand() - 0.5) * 30;
+    v = v * 0.55 + target * 0.45;
+    const x = grX + Math.max(2, Math.min(gMax - 2, v)) / gMax * grW;
+    pts.push(`${x.toFixed(1)},${(top + i * band + y).toFixed(1)}`);
+  }
+});
+const curve = "M" + pts.join(" L");
+const gridXs = [0, 0.25, 0.5, 0.75, 1].map((f) => grX + f * grW);
+const depthStep = 500; // ft per formation, purely decorative
+---
+<svg class="well-log" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="well-log-title">
+  <title id="well-log-title">A well log with one formation per app: {apps.map((a) => a.data.name).join(", ")}</title>
+  <defs>
+    {Object.entries(lithology).map(([kind, l]) => (
+      <pattern id={`lith-${kind}`} width={l.tile.w} height={l.tile.h} patternUnits="userSpaceOnUse">
+        <g fill="currentColor" set:html={l.tile.shapes} />
+      </pattern>
+    ))}
+  </defs>
+
+  <text class="log-head" x={lithX + 1} y="12">Rock</text>
+  <text class="log-head" x={grX + 6} y="12">Gamma ray</text>
+  <text class="log-scale" x={grX + 6} y="26">0</text>
+  <text class="log-scale" x={grX + grW - 4} y="26" text-anchor="end">150 API</text>
+  <line class="log-rule" x1="0" x2={grX + grW} y1={top} y2={top} />
+
+  {gridXs.map((x) => <line class="log-grid" x1={x} x2={x} y1={top} y2={H - 8} />)}
+
+  {apps.map((app, i) => {
+    const y = top + i * band;
+    return (
+      <g>
+        <rect x={lithX} y={y} width={lithW} height={band} fill={`url(#lith-${app.data.lithology})`} />
+        <line class="log-rule" x1={lithX} x2={labelX + 120} y1={y + band} y2={y + band} />
+        <text class="log-depth" x={depthW - 8} y={y + 4} text-anchor="end" dominant-baseline="hanging">
+          {(i * depthStep).toLocaleString("en-US")}
+        </text>
+        {[0.25, 0.5, 0.75].map((f) => (
+          <line class="log-tick" x1={depthW - 5} x2={depthW} y1={y + f * band} y2={y + f * band} />
+        ))}
+        <a href={`/apps/${app.id}/`}>
+          <text class="log-app" x={labelX} y={y + band / 2 - 2}>{app.data.name}</text>
+          <text class="log-status" x={labelX} y={y + band / 2 + 16}>{statusLabel[app.data.status]}</text>
+        </a>
+      </g>
+    );
+  })}
+
+  <rect class="log-frame" x={lithX} y={top} width={lithW + grW} height={H - 8 - top} />
+  <path class="log-curve" d={curve} pathLength="1" />
+  <text class="log-depth" x={depthW - 8} y={H - 8} text-anchor="end">ft</text>
+</svg>

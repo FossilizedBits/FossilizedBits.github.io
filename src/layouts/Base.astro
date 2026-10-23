@@ -1,0 +1,83 @@
+---
+import "@fontsource-variable/archivo";
+import "@fontsource/big-shoulders-display/700";
+import "@fontsource/big-shoulders-display/800";
+import "../styles/global.css";
+import Logo from "../components/Logo.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { site } from "../site.config";
+
+interface Props { title?: string; description?: string; appStoreId?: string; image?: string }
+const { title, description = site.description, appStoreId } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: iOS apps for drilling crews`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      // Apply a saved light/dark choice before the page paints, to avoid a flash of the wrong theme.
+      try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <!-- Bump ?v= whenever the icons change, so browsers drop their cached copies. -->
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16.png?v=2" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {appStoreId && <meta name="apple-itunes-app" content={`app-id=${appStoreId}`} />}
+    <meta name="theme-color" content="#ECEEE8" media="(prefers-color-scheme: light)" data-light="#ECEEE8" data-dark="#151C1F" />
+    <meta name="theme-color" content="#151C1F" media="(prefers-color-scheme: dark)" data-light="#ECEEE8" data-dark="#151C1F" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to Content</a>
+    <header class="site-header">
+      <div class="wrap site-header-inner">
+        <a class="brand" href="/">
+          <Logo size="3rem" />
+          <span>{site.name}</span>
+        </a>
+        <div class="site-tools">
+          <nav aria-label="Main">
+            <ul class="nav">
+              {site.nav.map((item) => (
+                <li><a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>{item.label}</a></li>
+              ))}
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap site-footer-inner">
+        <div class="footer-brand">
+          <Logo size="3.5rem" />
+          <p>{site.legalName}<br />Making small apps since {site.founded}.</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {site.social.map((s) => <li><a href={s.href} rel="me noopener">{s.label}</a></li>)}
+        </ul>
+        <p class="footer-copy">&copy; {year} {site.legalName}</p>
+      </div>
+    </footer>
+  </body>
+</html>

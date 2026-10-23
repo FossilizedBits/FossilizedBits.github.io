@@ -1,0 +1,10 @@
+---
+// Apps without their own icon fall back to the Fossilized Bits icon.
+interface Props { name: string; icon?: string; iconDark?: string; size?: string }
+const { icon, iconDark, size = "4.5rem" } = Astro.props;
+const src = icon ?? "/images/default.png";
+---
+<span class="app-icon has-image" style={`--size:${size}`}>
+  <img class:list={["icon-light", { "has-dark": iconDark }]} src={src} alt="" width="288" height="288" loading="lazy" decoding="async" />
+  {iconDark && <img class="icon-dark" src={iconDark} alt="" width="288" height="288" loading="lazy" decoding="async" />}
+</span>

@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import { site } from "../../../site.config";
+import { formatDate } from "../../../lib/status";
+
+// Only apps with a `privacy` block in their frontmatter get a privacy page.
+export async function getStaticPaths() {
+  const apps = (await getCollection("apps")).filter((a) => a.data.privacy);
+  return apps.map((app) => ({ params: { slug: app.id }, props: { app } }));
+}
+const { app } = Astro.props;
+const d = app.data;
+const p = d.privacy!;
+---
+<Base title={`${d.name} Privacy Policy`} description={`How ${d.name} handles your data.`}>
+  <section class="wrap page-head">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/apps/">Apps</a> / <a href={`/apps/${app.id}/`}>{d.name}</a> / <span aria-current="page">Privacy</span></nav>
+    <h1>{d.name} Privacy Policy</h1>
+    <p class="meta">Last updated <time datetime={p.updated.toISOString()}>{formatDate(p.updated)}</time></p>
+  </section>
+  <section class="wrap prose">
+    {p.collects.length === 0 ? (
+      <p>{d.name} does not collect personal data. Your inputs and results stay on your device and are not sent to {site.legalName} or to anyone else.</p>
+    ) : (
+      <>
+        <p>{d.name} collects the following, only to make the app work:</p>
+        <ul>{p.collects.map((c) => <li>{c}</li>)}</ul>
+        <p>We do not sell this data or share it with advertisers.</p>
+      </>
+    )}
+    <p>Questions about this policy go to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</Base>

@@ -1,0 +1,16 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import AppGrid from "../../components/AppGrid.astro";
+
+const apps = (await getCollection("apps")).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Apps" description="Every Fossilized Bits app, in release order.">
+  <section class="wrap page-head">
+    <h1>Apps</h1>
+    <p class="lede">Every app we make, in release order. Each one does a single job well.</p>
+  </section>
+  <section class="wrap section-tight">
+    <AppGrid apps={apps} />
+  </section>
+</Base>

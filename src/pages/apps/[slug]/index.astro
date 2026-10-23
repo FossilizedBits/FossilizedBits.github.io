@@ -1,0 +1,86 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import AppIcon from "../../../components/AppIcon.astro";
+import Litho from "../../../components/Litho.astro";
+import { rocksFor } from "../../../lib/lithology";
+import { statusLabel, platformList, storeUrl } from "../../../lib/status";
+
+export async function getStaticPaths() {
+  const apps = await getCollection("apps");
+  return apps.map((app) => ({ params: { slug: app.id }, props: { app } }));
+}
+
+const { app } = Astro.props;
+const d = app.data;
+const { Content } = await render(app);
+const store = storeUrl(d.appStoreId);
+const platforms = platformList(d.platforms);
+---
+<Base title={d.name} description={d.summary} appStoreId={d.appStoreId}>
+  <section class="wrap app-hero">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/apps/">Apps</a> / <span aria-current="page">{d.name}</span></nav>
+    <div class="app-hero-grid">
+      <AppIcon name={d.name} icon={d.icon} iconDark={d.iconDark} size="clamp(5rem, 14vw, 8.5rem)" />
+      <div>
+        <h1>{d.name}</h1>
+        <p class="lede">{d.tagline}</p>
+        <div class="app-actions">
+          {store && <a class="btn" href={store}>Get It on the App Store</a>}
+          {!store && d.testFlightUrl && <a class="btn" href={d.testFlightUrl}>Join the TestFlight Beta</a>}
+          {!store && !d.testFlightUrl && (
+            <p class="app-status-line">
+              <span class={`status status-${d.status}`}>{statusLabel[d.status]}</span> for {platforms}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Litho kinds={rocksFor(d)} class="app-band" />
+
+  {d.screenshots.length > 0 && (
+    <section class="shots-wrap" aria-label="Screenshots">
+      <div class="shots">
+        {d.screenshots.map((s) => (
+          <figure class={`shot shot-${s.device}`}>
+            <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="wrap app-body">
+    <div class="prose">
+      <p class="summary">{d.summary}</p>
+      <Content />
+    </div>
+    <aside class="spec" aria-label="App details">
+      <dl>
+        <dt>Status</dt><dd>{statusLabel[d.status]}</dd>
+        <dt>Runs On</dt><dd>{platforms}</dd>
+        {d.price && (<><dt>Price</dt><dd>{d.price}</dd></>)}
+        {d.version && (<><dt>Version</dt><dd>{d.version}</dd></>)}
+        {d.requires && (<><dt>Requires</dt><dd>{d.requires}</dd></>)}
+        {d.units && (<><dt>Units</dt><dd>{d.units}</dd></>)}
+      </dl>
+      <ul class="spec-links">
+        <li><a href={`/apps/${app.id}/support/`}>Support</a></li>
+        {d.privacy && <li><a href={`/apps/${app.id}/privacy/`}>Privacy Policy</a></li>}
+      </ul>
+    </aside>
+  </section>
+
+  {d.highlights.length > 0 && (
+    <section class="wrap section" aria-labelledby="highlights-heading">
+      <div class="section-head"><h2 id="highlights-heading">What It Does</h2></div>
+      <ul class="highlights">
+        {d.highlights.map((h) => (
+          <li><h3>{h.title}</h3><p>{h.text}</p></li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>

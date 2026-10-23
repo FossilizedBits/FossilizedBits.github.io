@@ -1,0 +1,13 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../site.config";
+---
+<Base title="About" description={`${site.name} was founded in ${site.founded} to make apps that make simple tasks simpler.`}>
+  <section class="wrap page-head">
+    <h1>We make the apps we want to use.</h1>
+  </section>
+  <section class="wrap prose">
+    <p>{site.name} was founded in {site.founded} with one idea: make simple tasks simpler. We build for niche markets, starting with the drilling floor, where the same calculations get worked by hand or in a spreadsheet tour after tour.</p>
+    <p>Each app does one job, works offline and shows its math, so you can check the answer against your own numbers.</p>
+  </section>
+</Base>
