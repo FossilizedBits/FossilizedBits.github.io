@@ -5,7 +5,7 @@ export const site = {
   url: "https://fossilizedbits.com",
   founded: 2014,
   description:
-    "Small, focused iOS apps for the calculations drilling crews repeat every tour.",
+    "Focused apps for homelab and mobile. One problem, one app at a time.",
   // TODO: replace with the address you want support mail sent to.
   email: "support@fossilizedbits.com",
   nav: [

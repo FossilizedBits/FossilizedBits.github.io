@@ -9,7 +9,7 @@ import { site } from "../site.config";
 
 interface Props { title?: string; description?: string; appStoreId?: string; image?: string }
 const { title, description = site.description, appStoreId } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: iOS apps for drilling crews`;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: Focused apps for homelab and mobile. One problem, one app at a time.`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname;
 const year = new Date().getFullYear();
@@ -73,7 +73,6 @@ const year = new Date().getFullYear();
           <p>{site.legalName}<br />Making small apps since {site.founded}.</p>
         </div>
         <ul class="footer-links">
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
           {site.social.map((s) => <li><a href={s.href} rel="me noopener">{s.label}</a></li>)}
         </ul>
         <p class="footer-copy">&copy; {year} {site.legalName}</p>
