@@ -6,6 +6,7 @@ summary: Micro Post sends a short post to the social services you choose, then s
 order: 8
 status: testing
 platforms: [iPhone]
+version: "2.0"
 highlights:
   - title: Hugo and Jekyll
     text: Posts are saved as Markdown with front matter in the folder you choose. Auto detects a Hugo site for you.

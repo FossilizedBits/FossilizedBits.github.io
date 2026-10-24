@@ -6,6 +6,7 @@ summary: Enter your hole sections, string and pump output. Bottoms Up returns th
 order: 1
 status: in-development
 platforms: [iPhone]
+version: "0.1"
 units: Oilfield and metric
 highlights:
   - title: Section by section

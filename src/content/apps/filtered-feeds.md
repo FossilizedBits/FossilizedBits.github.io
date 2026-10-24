@@ -1,6 +1,7 @@
 ---
 name: Filtered Feeds
 tagline: Your own podcast feeds, filtered down to the episodes you want.
+category: Container
 summary: Filtered Feeds is a self-hosted service that builds custom RSS feeds from the podcasts you already follow, keeping or dropping episodes by keyword. Subscribe to the result in any podcast app, and it stays up to date on its own.
 order: 10
 status: released

@@ -154,7 +154,8 @@ h3 { font-size: var(--step-2); font-weight: 700; }
 .hero .btn { margin-top: 1.75rem; }
 
 /* Home page progress log: one formation per app */
-.plog { --depth-w: 3.25rem; --lith-w: 3.5rem; --track-w: clamp(7rem, 16vw, 11rem); }
+/*.plog { --depth-w: 3.25rem; --lith-w: 3.5rem; --track-w: clamp(7rem, 16vw, 11rem); }*/
+.plog, .plog + .platform-key { --depth-w: 3.25rem; --lith-w: 3.5rem; --track-w: clamp(7rem, 16vw, 11rem); }
 .plog-head, .plog-row {
   display: grid;
   grid-template-columns: var(--depth-w) var(--lith-w) var(--track-w) minmax(0, 1fr) auto;
@@ -219,7 +220,8 @@ h3 { font-size: var(--step-2); font-weight: 700; }
 }
 .plog-platforms { color: var(--ink-2); }
 @media (max-width: 720px) {
-  .plog { --depth-w: 0rem; --lith-w: 1.5rem; --track-w: 4.5rem; }
+/*  .plog { --depth-w: 0rem; --lith-w: 1.5rem; --track-w: 4.5rem; }*/
+  .plog, .plog + .platform-key { --depth-w: 0rem; --lith-w: 1.5rem; --track-w: 4.5rem; }
   .plog-head, .plog-row { grid-template-columns: var(--lith-w) var(--track-w) minmax(0, 1fr); }
   .plog-depth, .plog-depth-head { display: none; }
   .plog-lith-head { visibility: hidden; }
@@ -435,6 +437,8 @@ h3 { font-size: var(--step-2); font-weight: 700; }
   font-size: var(--step--1); color: var(--ink-2);
 }
 .platform-key li { display: flex; align-items: center; gap: 0.5rem; }
+/* Start the legend under the Platform column, past the depth gutter */
+.plog + .platform-key { padding-left: var(--depth-w); }
 .platform-key-swatch { width: 1.75rem; height: 1.25rem; border: 1px solid var(--ink); }
 .platform-key-note { color: var(--ink-2); font-style: italic; }
 /* /apps/ catalog */

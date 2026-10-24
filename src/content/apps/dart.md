@@ -6,6 +6,7 @@ summary: DΔrt is a Safari extension that sends YouTube and Reddit pages to your
 order: 9
 status: released
 platforms: [iPhone, iPad, Mac]
+version: "1.0"
 icon: /images/apps/dart/icon.png
 iconDark: /images/apps/dart/icon-dark.png
 requires: iOS and iPadOS 26 or later

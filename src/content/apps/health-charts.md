@@ -6,6 +6,7 @@ summary: Health Charts turns the step, sleep and other data in Apple Health into
 order: 6
 status: testing
 platforms: [iPhone]
+version: "2.0"
 requires: iOS 27 or later
 highlights:
   - title: Sleep by stage

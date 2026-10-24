@@ -6,6 +6,7 @@ summary: Well Killsheet builds a driller's method or wait-and-weight kill sheet 
 order: 3
 status: planned
 platforms: [iPad]
+version: "0.1"
 units: Oilfield and metric
 highlights:
   - title: Built for iPad

@@ -6,7 +6,7 @@ summary: MeTube is a native player for your self-hosted MeTube server. Browse an
 order: 7
 status: testing
 platforms: [iPhone, iPad]
-version: "1.3"
+version: "1.3.1"
 requires: iOS 27 or later
 highlights:
   - title: Your library, newest first

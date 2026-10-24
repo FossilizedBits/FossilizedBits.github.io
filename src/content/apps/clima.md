@@ -6,7 +6,7 @@ summary: Clima puts current conditions, a twelve-hour temperature chart, a four-
 order: 5
 status: testing
 platforms: [iPhone]
-version: 1.4.1
+version: "1.4.1"
 requires: iOS 27 or later
 units: Celsius or Fahrenheit
 highlights:

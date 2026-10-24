@@ -6,6 +6,7 @@ summary: PathFinder points you back to any place you've saved, with the distance
 order: 4
 status: planned
 platforms: [iPhone]
+version: "0.1"
 highlights:
   - title: Drop a pin
     text: Save the truck, the location gate or the camp with one tap, even with no signal.
