@@ -6,8 +6,9 @@ export default defineConfig({
   trailingSlash: "always",
   integrations: [sitemap()],
   markdown: {
-    // Formula blocks are plain text, so skip syntax highlighting and style them in CSS.
-    syntaxHighlight: false,
+    // Shiki with the css-variables theme: token colors come from the site palette in global.css.
+    // Untagged ``` blocks (the formulas) render as plaintext with no token colors.
+    shikiConfig: { theme: "css-variables" },
   },
   vite: {
     // File-change events don't reach the container machine through the shared folder, so poll.

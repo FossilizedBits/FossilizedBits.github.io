@@ -10,8 +10,22 @@
   --hazard: #e2ae12;
   --planned: #8a6a2f;
 
+  /* Syntax colors for Shiki's css-variables theme */
+  --astro-code-background: var(--paper-2);
+  --astro-code-foreground: var(--ink);
+  --astro-code-token-keyword: #1f6e5a;
+  --astro-code-token-string: #8a6a2f;
+  --astro-code-token-string-expression: #8a6a2f;
+  --astro-code-token-function: #2b5d7a;
+  --astro-code-token-constant: #9a4b2f;
+  --astro-code-token-parameter: var(--ink);
+  --astro-code-token-comment: #6b7872;
+  --astro-code-token-punctuation: var(--ink-2);
+  --astro-code-token-link: #1f6e5a;
+
   --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
   --body: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --wrap: clamp(72rem, 80vw, 110rem);
   /*--wrap: 72rem;*/
@@ -35,6 +49,13 @@
     --curve: #5cc0a0;
     --hazard: #f0c030;
     --planned: #d2a961;
+    --astro-code-token-keyword: #5cc0a0;
+    --astro-code-token-string: #d2a961;
+    --astro-code-token-string-expression: #d2a961;
+    --astro-code-token-function: #7fb2d0;
+    --astro-code-token-constant: #e08a68;
+    --astro-code-token-comment: #8a9893;
+    --astro-code-token-link: #5cc0a0;
     color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -47,6 +68,13 @@
     --curve: #5cc0a0;
     --hazard: #f0c030;
     --planned: #d2a961;
+    --astro-code-token-keyword: #5cc0a0;
+    --astro-code-token-string: #d2a961;
+    --astro-code-token-string-expression: #d2a961;
+    --astro-code-token-function: #7fb2d0;
+    --astro-code-token-constant: #e08a68;
+    --astro-code-token-comment: #8a9893;
+    --astro-code-token-link: #5cc0a0;
     color-scheme: dark;
   }
 }
@@ -373,6 +401,34 @@ h3 { font-size: var(--step-2); font-weight: 700; }
 }
 .prose pre code { font-family: var(--body); font-variant-numeric: tabular-nums; white-space: pre-wrap; }
 .prose :not(pre) > code { font-family: var(--body); background: var(--paper-2); padding: 0.1em 0.3em; border-radius: 0.2em; }
+
+/* Code listings: fenced blocks with a language (```bash), highlighted by Shiki (data-language on <pre>).
+   Untagged ``` blocks come through as "plaintext" and keep the formula style above.
+   A rounded card with a header strip naming the language; the code scrolls sideways instead of wrapping. */
+.prose pre[data-language]:not([data-language="plaintext"]) {
+  padding: 0; border: 1px solid var(--grid); border-radius: 10px;
+  overflow: hidden !important; line-height: 1.6;
+}
+.prose pre[data-language]:not([data-language="plaintext"])::before {
+  content: attr(data-language); display: block;
+  padding: 0.45rem 1rem; border-bottom: 1px solid var(--grid);
+  background: var(--paper); color: var(--ink-2);
+  font-family: var(--display); font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.prose pre:not([data-language="plaintext"]):is([data-language="bash"], [data-language="sh"], [data-language="shell"], [data-language="zsh"])::before { content: "Terminal"; }
+.prose pre:not([data-language="plaintext"])[data-language="dockerfile"]::before { content: "Containerfile"; }
+.prose pre:not([data-language="plaintext"]):is([data-language="js"], [data-language="javascript"])::before { content: "JavaScript"; }
+.prose pre:not([data-language="plaintext"]):is([data-language="ts"], [data-language="typescript"])::before { content: "TypeScript"; }
+.prose pre:not([data-language="plaintext"])[data-language="swift"]::before { content: "Swift"; }
+.prose pre[data-language]:not([data-language="plaintext"]) > code {
+  display: block; padding: 0.9rem 1rem 1rem;
+  overflow-x: auto; white-space: pre;
+  font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: normal;
+  tab-size: 2;
+}
+.prose pre[data-language]:not([data-language="plaintext"]) span[style*="token-comment"] { font-style: italic; }
+.prose pre[data-language]:not([data-language="plaintext"]) ::selection { background: color-mix(in srgb, var(--curve) 30%, transparent); }
 
 /* Blog */
 .post-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
