@@ -6,7 +6,7 @@ summary: Slug It works out slug weight, length and barite for a dry trip, so you
 order: 2
 status: in-development
 platforms: [iPhone]
-version: "0.1"
+version: "0.7.3"
 units: Oilfield and metric
 highlights:
   - title: Start from dry pipe

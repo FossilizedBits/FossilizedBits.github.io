@@ -6,7 +6,7 @@ summary: Filtered Feeds is a self-hosted service that builds custom RSS feeds fr
 order: 10
 status: released
 platforms: [Self-Hosted]
-version: "2.0"
+version: "2.2"
 requires: Docker and Docker Compose
 highlights:
   - title: Keep only what you want
