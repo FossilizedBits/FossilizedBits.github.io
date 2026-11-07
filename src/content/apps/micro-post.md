@@ -2,13 +2,13 @@
 name: Micro Post
 tagline: Write a short post, share it, and publish it to your blog.
 category: Blogging
-summary: Micro Post sends a short post to the social services you choose, then saves it as a Markdown file in your Hugo or Jekyll site's GitHub repository, with links back to each social post.
+summary: Micro Post sends a short post to the social services you choose, then saves it as a Markdown file in your static site's GitHub repository, with links back to each social post.
 order: 8
 status: testing
 platforms: [iPhone]
-version: "2.0"
+version: "2.1"
 highlights:
-  - title: Hugo and Jekyll
+  - title: Astro, Hugo, and Jekyll
     text: Posts are saved as Markdown with front matter in the folder you choose. Auto detects a Hugo site for you.
   - title: Post everywhere at once
     text: Pick the social services for each post. Any service without credentials is skipped.
