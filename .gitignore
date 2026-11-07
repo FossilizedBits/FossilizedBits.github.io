@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # Reference screenshots kept at the project root (not site assets)
 /*.png
+
+# Claude output files
+Claude outputs/

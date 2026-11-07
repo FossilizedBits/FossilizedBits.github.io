@@ -4,13 +4,17 @@ Static site for fossilizedbits.com, built with Astro. Every app is one Markdown 
 
 ## Run it
 
-This site is one workspace in `~/Developer/Astro`, which shares a single `node_modules` across sites. Run everything from `~/Developer/Astro`, inside the `astro` container machine:
+The site uses pnpm. Run everything from this folder, inside the `astro` container machine. Nothing is installed on macOS. pnpm is in `~/.local/bin` in the machine, so each command loads `~/.profile` first:
 
 ```sh
-container machine run -n astro -- npm install
-container machine run -n astro -- npm run dev:fb     # dev server on port 4321
-container machine run -n astro -- npm run build:fb   # static site in "Fossilized Bits/dist/"
+container machine run -n astro -- sh -c '. ~/.profile && pnpm install'
+container machine run -n astro -- sh -c '. ~/.profile && pnpm dev --host --force'   # dev server on port 4321
+container machine run -n astro -- sh -c '. ~/.profile && pnpm build'                # static site in dist/
 ```
+
+In a shell inside the machine, run `. ~/.profile` once, then use the `pnpm` commands directly.
+
+Packages are hard links to the shared pnpm store at `~/.pnpm-store`. Commit `pnpm-lock.yaml` after each dependency change: the GitHub Pages build reads it to pick pnpm and the exact package versions.
 
 `dist/` is plain HTML and CSS, with no client-side JavaScript. Host it anywhere: Cloudflare Pages, Netlify, GitHub Pages, or behind your own reverse proxy.
 
