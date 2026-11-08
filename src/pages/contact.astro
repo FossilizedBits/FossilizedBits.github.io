@@ -1,20 +1,45 @@
 ---
+// The Contact text, email and social links are in src/content/pages/contact.md.
+// This file only sets the layout.
+import { getEntry, render } from "astro:content";
 import Base from "../layouts/Base.astro";
-import { site } from "../site.config";
+
+const page = await getEntry("pages", "contact");
+if (!page) throw new Error("Missing src/content/pages/contact.md");
+const { Content } = await render(page);
+const { title, description, email, social } = page.data;
+
+// Known sites get a label and an icon from /public/images/social. Others show the domain as text.
+const known = [
+  { hosts: ["twitter.com", "x.com"], label: "Twitter", icon: "square-twitter-brands-solid-full.svg" },
+  { hosts: ["linkedin.com"], label: "LinkedIn", icon: "linkedin-brands-solid-full.svg" },
+  { hosts: ["github.com"], label: "GitHub", icon: "square-github-brands-solid-full.svg" },
+];
+const links = social.map((href) => {
+  const host = new URL(href).hostname.replace(/^www\./, "");
+  const match = known.find((k) => k.hosts.includes(host));
+  return { href, label: match?.label ?? host, icon: match?.icon };
+});
 ---
-<Base title="Contact" description={`Get in touch with ${site.name}.`}>
+<Base title={title} description={description}>
   <section class="wrap page-head">
-    <h1>Contact</h1>
-    <p class="lede">Questions, bug reports and app ideas from the field are all welcome. We read everything.</p>
-    <ul class="social">
-      {site.social.map((s) => (
-        <li>
-          <a href={s.href} rel="me noopener" aria-label={s.label} title={s.label}>
-            <span class="social-icon" style={`--icon: url("/images/social/${s.icon}")`} aria-hidden="true"></span>
-          </a>
-        </li>
-      ))}
-    </ul>
-	{/* <a class="btn" href={`mailto:${site.email}`}>Email {site.email}</a> */}
+    <h1>{title}</h1>
+    <div class="lede"><Content /></div>
+    {links.length > 0 && (
+      <ul class="social">
+        {links.map((s) => (
+          <li>
+            {s.icon ? (
+              <a href={s.href} rel="me noopener" aria-label={s.label} title={s.label}>
+                <span class="social-icon" style={`--icon: url("/images/social/${s.icon}")`} aria-hidden="true"></span>
+              </a>
+            ) : (
+              <a class="social-text" href={s.href} rel="me noopener">{s.label}</a>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+    {email && <a class="btn" href={`mailto:${email}`}>Email {email}</a>}
   </section>
 </Base>

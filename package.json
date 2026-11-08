@@ -1,7 +1,7 @@
 {
   "name": "fossilized-bits",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "packageManager": "pnpm@12.16.1",
   "scripts": {

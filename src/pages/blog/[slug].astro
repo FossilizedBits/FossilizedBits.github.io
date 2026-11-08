@@ -16,6 +16,6 @@ const { Content } = await render(post);
       <h1>{post.data.title}</h1>
       <p class="meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></p>
     </header>
-    <div class="prose"><Content /></div>
+    <div class="prose prose-full"><Content /></div>
   </article>
 </Base>

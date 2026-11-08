@@ -55,4 +55,18 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { apps, blog };
+// Stand-alone pages whose text lives in Markdown, e.g. src/content/pages/about.md.
+// The page layout stays in src/pages/<name>.astro.
+const pages = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
+  schema: z.object({
+    title: z.string(), // the big heading on the page
+    description: z.string(), // for search results and link previews
+    // Contact page only. A blank email hides the email button.
+    email: z.union([z.string().email(), z.literal(""), z.null()]).optional(),
+    // Contact page only. One profile URL per line; the icon comes from the domain.
+    social: z.array(z.string().url()).default([]),
+  }),
+});
+
+export const collections = { apps, blog, pages };
